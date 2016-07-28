@@ -1,4 +1,5 @@
 #include "MenuScene.h"
+#include "PlayScene.h"
 
 Scene * MenuScene::createScene()
 {
@@ -37,4 +38,5 @@ bool MenuScene::init()
 void MenuScene::onPlay(Ref *)
 {
 	log("==onplay clicked");
+	Director::getInstance()->runWithScene(PlayScene::create());
 }
