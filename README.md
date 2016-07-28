@@ -12,4 +12,8 @@ Not finished yet.
 
 ![Game Over](screenshot3.png)
 
+## Links
+
+* [Cocos2d-x v3.10 API Reference](http://www.cocos2d-x.org/docs/api-ref/cplusplus/V3.10/)
+
 *kbridge*

@@ -12,4 +12,8 @@ public:
 	CREATE_FUNC(AnimationLayer);
 
 protected:
+	SpriteBatchNode *m_spriteSheet;
+	Action *m_runningAction;
+	Sprite *m_sprite;
+
 };
