@@ -10,4 +10,14 @@ public:
 	CREATE_FUNC(PlayScene);
 
 	void onEnter() override;
+	void onExit() override;
+
+	void update(float delta) override;
+
+protected:
+	cpSpace *m_space;
+	cpShape *m_wallBottom;
+
+	void initPhysics();
+	void uninitPhysics();
 };
