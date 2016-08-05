@@ -13,9 +13,12 @@ void PlayScene::onEnter()
 	Node::onEnter();
 	initPhysics();
 
-	addChild(BackgroundLayer::create());
-	addChild(AnimationLayer::create(m_space));
-	addChild(StatusLayer::create());
+	m_gameLayer = Layer::create();
+
+	m_gameLayer->addChild(BackgroundLayer::create(), 0, LAYER_BACKGROUND);
+	m_gameLayer->addChild(AnimationLayer::create(m_space), 0, LAYER_ANIMATION);
+	this->addChild(m_gameLayer);
+	this->addChild(StatusLayer::create(), 0, LAYER_STATUS);
 
 	scheduleUpdate();
 }
@@ -27,12 +30,12 @@ void PlayScene::onExit()
 
 void PlayScene::update(float delta)
 {
-	std::stringstream ss;
-	ss << "delta:" << delta << std::endl;
-	std::string s(ss.str());
-	log(s.c_str());
-
 	cpSpaceStep(m_space, delta);
+
+	AnimationLayer *animationLayer =
+		static_cast<AnimationLayer *>(m_gameLayer->getChildByTag(LAYER_ANIMATION));
+	float eyeX = animationLayer->getEyeX();
+	m_gameLayer->setPosition(-eyeX, 0.0f);
 }
 
 void PlayScene::initPhysics()

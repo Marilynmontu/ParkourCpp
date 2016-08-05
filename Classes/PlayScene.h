@@ -18,6 +18,8 @@ protected:
 	cpSpace *m_space;
 	cpShape *m_wallBottom;
 
+	Layer *m_gameLayer;
+
 	void initPhysics();
 	void uninitPhysics();
 };

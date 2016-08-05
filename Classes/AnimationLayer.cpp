@@ -64,5 +64,15 @@ bool AnimationLayer::init()
 
 	m_spriteSheet->addChild(m_sprite);
 
+	m_debugNode = PhysicsDebugNode::create(m_space);
+	this->addChild(m_debugNode, 10);
+
+	// m_debugNode->setVisible(false);
+
 	return true;
+}
+
+float AnimationLayer::getEyeX()
+{
+	return m_sprite->getPositionX() - RUNNER_START_X;
 }

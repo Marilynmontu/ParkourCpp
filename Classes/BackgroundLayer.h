@@ -11,6 +11,14 @@ public:
 
 	CREATE_FUNC(BackgroundLayer);
 
+	void update(float dt) override;
+
 protected:
+	TMXTiledMap *m_map00;
+	TMXTiledMap *m_map01;
+	float m_mapWidth;
+	int m_mapIndex;
+
+	bool checkAndReload(float eyeX);
 };
 

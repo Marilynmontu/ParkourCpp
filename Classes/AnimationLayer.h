@@ -14,6 +14,8 @@ public:
 
 	virtual ~AnimationLayer();
 
+	float getEyeX();
+
 protected:
 	SpriteBatchNode *m_spriteSheet;
 	Action *m_runningAction;
@@ -21,4 +23,6 @@ protected:
 	cpSpace *m_space;
 	cpBody *m_body;
 	cpShape *m_shape;
+
+	PhysicsDebugNode *m_debugNode;
 };
