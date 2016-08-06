@@ -1,0 +1,4 @@
+# REFERENCE: https://github.com/github/linguist#my-repository-is-detected-as-the-wrong-language
+* linguist-vendored
+Classes/* linguist-vendored=false
+Classes/*.h linguist-language=C++
