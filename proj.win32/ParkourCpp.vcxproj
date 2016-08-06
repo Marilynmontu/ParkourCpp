@@ -149,8 +149,11 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\cocos2d-x-3.10\prebuilt\win32\*.*" "$(OutDir)"
     <ClCompile Include="..\Classes\AnimationLayer.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\BackgroundLayer.cpp" />
+    <ClCompile Include="..\Classes\Coin.cpp" />
+    <ClCompile Include="..\Classes\GameObject.cpp" />
     <ClCompile Include="..\Classes\MenuScene.cpp" />
     <ClCompile Include="..\Classes\PlayScene.cpp" />
+    <ClCompile Include="..\Classes\Rock.cpp" />
     <ClCompile Include="..\Classes\StatusLayer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -158,10 +161,14 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\cocos2d-x-3.10\prebuilt\win32\*.*" "$(OutDir)"
     <ClInclude Include="..\Classes\AnimationLayer.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BackgroundLayer.h" />
+    <ClInclude Include="..\Classes\Coin.h" />
+    <ClInclude Include="..\Classes\GameObject.h" />
     <ClInclude Include="..\Classes\Global.h" />
     <ClInclude Include="..\Classes\MenuScene.h" />
     <ClInclude Include="..\Classes\PlayScene.h" />
+    <ClInclude Include="..\Classes\Rock.h" />
     <ClInclude Include="..\Classes\StatusLayer.h" />
+    <ClInclude Include="..\Classes\_chipmunk.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #include "AnimationLayer.h"
 #include <sstream>
-#include <chipmunk.h>
+#include "_chipmunk.h"
 #include "Global.h"
 
 AnimationLayer * AnimationLayer::create(cpSpace *space)
