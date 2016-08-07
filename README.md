@@ -7,6 +7,12 @@ A C++ port of the toy project Parkour in the official [Cocos2d-JS Tutorial](http
 ![Game Start](screenshot1.png)
 ![Game Running](screenshot2.png)
 
+## Status
+
+The port of the original game is finished.
+
+A branch using Box2d as the physics engine is under development.
+
 ## Contacts
 
 For any questions or suggestions, try:
