@@ -16,5 +16,18 @@ bool StatusLayer::init()
 	m_labelMeter->setPosition(winSize.width - 70.0f, winSize.height - 20.0f);
 	addChild(m_labelMeter);
 
+	m_coins = 0;
+
 	return true;
+}
+
+void StatusLayer::updateMeter(float px)
+{
+	m_labelMeter->setString(StringUtils::format("%dM", (int) (px / 10)));
+}
+
+void StatusLayer::addCoin(int num)
+{
+	m_coins += num;
+	m_labelCoin->setString(StringUtils::format("Coins:%d", m_coins));
 }

@@ -11,8 +11,12 @@ public:
 
 	CREATE_FUNC(StatusLayer);
 
+	void updateMeter(float px);
+	void addCoin(int num);
+
 protected:
 	LabelTTF *m_labelCoin;
 	LabelTTF *m_labelMeter;
+	int m_coins;
 };
 

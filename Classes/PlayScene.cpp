@@ -1,12 +1,16 @@
 #include "PlayScene.h"
 #include "_chipmunk.h"
+#include <AudioEngine.h>
 #include "BackgroundLayer.h"
 #include "AnimationLayer.h"
 #include "StatusLayer.h"
+#include "GameOverLayer.h"
 #include "Global.h"
 
 #include <string>
 #include <sstream>
+
+using namespace cocos2d::experimental; // for AudioEngine
 
 void PlayScene::onEnter()
 {
@@ -20,12 +24,23 @@ void PlayScene::onEnter()
 	this->addChild(m_gameLayer);
 	this->addChild(StatusLayer::create(), 0, LAYER_STATUS);
 
-	scheduleUpdate();
+	AudioEngine::play2d("background.mp3", true);
+
+	this->scheduleUpdate();
 }
 
 void PlayScene::onExit()
 {
+	// GameLayer will destruct by cocos2d after this function (who 
+	// destroy cpSpace). The destruction still needs cpSpace. So
+	// do it in advance.
+	m_gameLayer->removeFromParentAndCleanup(true);
 	uninitPhysics();
+
+	// [FIXED]
+	// call parent onExit()
+	// otherwise update() will still be called after this function
+	Node::onExit();
 }
 
 void PlayScene::update(float delta)
@@ -57,7 +72,10 @@ void PlayScene::initPhysics()
 void PlayScene::uninitPhysics()
 {
 	cpShapeFree(m_wallBottom);
+	m_wallBottom = nullptr;
+
 	cpSpaceFree(m_space);
+	m_space = nullptr;
 }
 
 cpBool PlayScene::collisionCoinBegin(cpArbiter * arb, cpSpace * space, void * data)
@@ -68,6 +86,11 @@ cpBool PlayScene::collisionCoinBegin(cpArbiter * arb, cpSpace * space, void * da
 	cpArbiterGetShapes(arb, &a, &b);
 	cpSpaceAddPostStepCallback(This->m_space, removeCoin, b, This);
 
+	AudioEngine::play2d("pickup_coin.mp3");
+
+	auto statusLayer = This->getChildByTag<StatusLayer *>(LAYER_STATUS);
+	statusLayer->addCoin(1);
+
 	return cpFalse;
 }
 
@@ -75,6 +98,11 @@ cpBool PlayScene::collisionRockBegin(cpArbiter * arb, cpSpace * space, void * da
 {
 	PlayScene *This = static_cast<PlayScene *>(data);
 	log("== game over");
+
+	AudioEngine::stopAll();
+
+	Director::getInstance()->pause();
+	This->addChild(GameOverLayer::create());
 
 	return cpFalse;
 }

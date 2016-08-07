@@ -1,7 +1,11 @@
 #include "AnimationLayer.h"
 #include <sstream>
 #include "_chipmunk.h"
+#include <AudioEngine.h>
+#include "StatusLayer.h"
 #include "Global.h"
+
+using namespace cocos2d::experimental; // for AudioEngine
 
 AnimationLayer * AnimationLayer::create(cpSpace *space)
 {
@@ -22,7 +26,10 @@ AnimationLayer * AnimationLayer::create(cpSpace *space)
 AnimationLayer::~AnimationLayer()
 {
 	cpShapeFree(m_shape);
+	m_shape = nullptr;
+
 	cpBodyFree(m_body);
+	m_body = nullptr;
 }
 
 bool AnimationLayer::init()
@@ -34,15 +41,7 @@ bool AnimationLayer::init()
 	m_spriteSheet = SpriteBatchNode::create("running.png");
 	this->addChild(m_spriteSheet);
 
-	Vector<SpriteFrame *> animFrames;
-	for (int i = 0; i < 8; i++) {
-		std::stringstream ss;
-		ss << "runner" << i << ".png";
-		animFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(ss.str()));
-	}
-
-	auto animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
-	m_runningAction = RepeatForever::create(Animate::create(animation));
+	this->initAction();
 
 	m_sprite = PhysicsSprite::createWithSpriteFrameName("runner0.png");
 	auto contentSize = m_sprite->getContentSize();
@@ -69,10 +68,120 @@ bool AnimationLayer::init()
 
 	// m_debugNode->setVisible(false);
 
+	m_stat = RUNNER_STAT_RUNNING;
+
+	auto eventListener = EventListenerTouchOneByOne::create();
+	eventListener->onTouchBegan = [this] (Touch *, Event *) {
+		this->jump();
+		// if return false, onTouchMoved, onTouchEnded, onTouchCancelled will never called.
+		return true;
+	};
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventListener, this);
+
+	auto eventListener2 = EventListenerKeyboard::create();
+	eventListener2->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event *) {
+		if (keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
+			this->jump();
+		}
+		else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+			Director::getInstance()->end();
+		}
+	};
+	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventListener2, this);
+
+	this->scheduleUpdate();
+
 	return true;
+}
+
+void AnimationLayer::update(float dt)
+{
+	// update meter
+	auto statusLayer =
+		this->getParent()->getParent()->getChildByTag<StatusLayer *>(LAYER_STATUS);
+	statusLayer->updateMeter(m_sprite->getPositionX() - RUNNER_START_X);
+
+	// check and update runner stat
+	cpVect vel = cpBodyGetVel(m_body);
+	if (m_stat == RUNNER_STAT_JUMP_UP) {
+		if (vel.y < 0.1f) {
+			m_stat = RUNNER_STAT_JUMP_DOWN;
+			m_sprite->stopAllActions();
+			m_sprite->runAction(m_jumpDownAction);
+		}
+	}
+	else if (m_stat == RUNNER_STAT_JUMP_DOWN) {
+		if (vel.y == 0.0f) {
+			m_stat = RUNNER_STAT_RUNNING;
+			m_sprite->stopAllActions();
+			m_sprite->runAction(m_runningAction);
+		}
+	}
+}
+
+void AnimationLayer::onExit()
+{
+	m_runningAction->release();
+	m_jumpUpAction->release();
+	m_jumpDownAction->release();
+
+	Node::onExit();
 }
 
 float AnimationLayer::getEyeX()
 {
 	return m_sprite->getPositionX() - RUNNER_START_X;
+}
+
+void AnimationLayer::initAction()
+{
+	// init runningAction
+	Vector<SpriteFrame *> animFrames;
+	for (int i = 0; i < 8; i++) {
+		std::stringstream ss;
+		ss << "runner" << i << ".png";
+		animFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(ss.str()));
+	}
+
+	auto animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+	m_runningAction = RepeatForever::create(Animate::create(animation));
+	m_runningAction->retain();
+
+	// init jumpUpAction
+	animFrames.clear();
+	for (int i = 0; i < 4; i++) {
+		std::stringstream ss;
+		ss << "runnerJumpUp" << i << ".png";
+		auto s = SpriteFrameCache::getInstance();
+		animFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(ss.str()));
+	}
+	animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+	m_jumpUpAction = Animate::create(animation);
+	m_jumpUpAction->retain();
+
+	// init jumpDownAction
+	animFrames.clear();
+	for (int i = 0; i < 2; i++) {
+		std::stringstream ss;
+		ss << "runnerJumpDown" << i << ".png";
+		animFrames.pushBack(SpriteFrameCache::getInstance()->getSpriteFrameByName(ss.str()));
+	}
+	animation = Animation::createWithSpriteFrames(animFrames, 0.3f);
+	m_jumpDownAction = Animate::create(animation);
+	m_jumpDownAction->retain();
+}
+
+void AnimationLayer::jump()
+{
+	log("jump");
+	if (m_stat == RUNNER_STAT_RUNNING) {
+		cpVect j = { 0.0f, 250.0f };
+		cpVect r = cpvzero;
+		cpBodyApplyImpulse(m_body, j, r);
+		m_stat = RUNNER_STAT_JUMP_UP;
+		m_sprite->stopAllActions();
+		m_sprite->runAction(m_jumpUpAction);
+
+		AudioEngine::play2d("jump.mp3");
+	}
 }

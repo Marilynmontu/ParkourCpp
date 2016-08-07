@@ -10,3 +10,7 @@ const int LAYER_STATUS = 2;
 const int SPRITE_RUNNER = 0;
 const int SPRITE_COIN = 1;
 const int SPRITE_ROCK = 2;
+
+const int RUNNER_STAT_RUNNING = 0;
+const int RUNNER_STAT_JUMP_UP = 1;
+const int RUNNER_STAT_JUMP_DOWN = 2;

@@ -2,8 +2,6 @@
 
 A C++ port of the toy project Parkour in the official [Cocos2d-JS Tutorial](http://cocos2d-x.org/docs/tutorials/javascript/javascript/index.html).
 
-Not finished yet.
-
 ## Original Game Screenshots
 
 ![Game Start](screenshot1.png)
@@ -16,6 +14,7 @@ Not finished yet.
 
 * [Cocos2d-x v3.10 API Reference](http://www.cocos2d-x.org/docs/api-ref/cplusplus/V3.10/)
 * [Tiled Map Editor](http://www.mapeditor.org/)
+* [Cocos2d-x Tutorial Series: Handling the Keyboard](http://www.gamefromscratch.com/post/2014/10/07/Cocos2d-x-Tutorial-Series-Handling-the-Keyboard.aspx)
 
 ### Chipmunk2D
 - [Chipmunk2D Physics - Documentation](http://chipmunk-physics.net/documentation.php)
