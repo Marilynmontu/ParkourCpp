@@ -2,7 +2,6 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "_chipmunk.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -18,15 +17,19 @@ public:
 	void update(float delta) override;
 
 protected:
+#if 0
 	cpSpace *m_space;
 	cpShape *m_wallBottom;
+#endif
 
 	Layer *m_gameLayer;
 
 	void initPhysics();
 	void uninitPhysics();
 
+#if 0
 	static cpBool collisionCoinBegin(cpArbiter *arb, cpSpace *space, void *data);
 	static cpBool collisionRockBegin(cpArbiter *arb, cpSpace *space, void *data);
+#endif
 	static void removeCoin(cpSpace *space, void *key, void *data);
 };

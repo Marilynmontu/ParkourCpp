@@ -80,9 +80,6 @@
     <ClInclude Include="..\Classes\Rock.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\_chipmunk.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\GameOverLayer.h">
       <Filter>src</Filter>
     </ClInclude>

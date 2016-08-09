@@ -1,5 +1,4 @@
 #include "BackgroundLayer.h"
-#include "_chipmunk.h"
 #include <algorithm> // std::remove_if
 #include "AnimationLayer.h"
 #include "Coin.h"
@@ -11,7 +10,7 @@ using std::unique_ptr;
 BackgroundLayer * BackgroundLayer::create(cpSpace * space)
 {
 	BackgroundLayer *pRet = new(std::nothrow) BackgroundLayer();
-	if (pRet && (pRet->m_space = space) && pRet->init())
+	if (pRet && pRet->init())
 	{
 		pRet->autorelease();
 		return pRet;
@@ -28,6 +27,8 @@ bool BackgroundLayer::init()
 {
 	if (!Layer::init())
 		return false;
+
+	m_space = nullptr;
 
 	m_map00 = TMXTiledMap::create("map00.tmx");
 	this->addChild(m_map00);
@@ -87,7 +88,7 @@ void BackgroundLayer::loadObjects(TMXTiledMap * map, int mapIndex)
 	auto coinGroup = map->getObjectGroup("coin");
 	auto coinArray = coinGroup->getObjects();
 	for (unsigned i = 0; i < coinArray.size(); i++) {
-		cpVect pos;
+		Vec2 pos;
 		pos.x = coinArray[i].asValueMap()["x"].asFloat() + mapIndex * m_mapWidth;
 		pos.y = coinArray[i].asValueMap()["y"].asFloat();
 		unique_ptr<Coin> coin(new Coin(m_spriteSheet, m_space, pos));
@@ -114,6 +115,7 @@ void BackgroundLayer::removeObjects(int mapIndex)
 		m_objects.end());
 }
 
+#if 0
 void BackgroundLayer::removeObjectByShape(cpShape * shape)
 {
 	auto iter = std::find_if(m_objects.begin(), m_objects.end(),
@@ -121,3 +123,4 @@ void BackgroundLayer::removeObjectByShape(cpShape * shape)
 	if (iter != m_objects.end())
 		m_objects.erase(iter);
 }
+#endif

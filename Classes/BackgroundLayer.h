@@ -17,7 +17,7 @@ public:
 
 	void update(float dt) override;
 
-	void removeObjectByShape(cpShape *shape);
+//	void removeObjectByShape(cpShape *shape);
 
 protected:
 	TMXTiledMap *m_map00;

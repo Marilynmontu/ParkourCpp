@@ -1,5 +1,4 @@
 #include "PlayScene.h"
-#include "_chipmunk.h"
 #include <AudioEngine.h>
 #include "BackgroundLayer.h"
 #include "AnimationLayer.h"
@@ -16,11 +15,11 @@ void PlayScene::onEnter()
 {
 	Node::onEnter();
 	initPhysics();
-
+	
 	m_gameLayer = Layer::create();
 
-	m_gameLayer->addChild(BackgroundLayer::create(m_space), 0, LAYER_BACKGROUND);
-	m_gameLayer->addChild(AnimationLayer::create(m_space), 0, LAYER_ANIMATION);
+	m_gameLayer->addChild(BackgroundLayer::create(nullptr), 0, LAYER_BACKGROUND);
+	m_gameLayer->addChild(AnimationLayer::create(nullptr), 0, LAYER_ANIMATION);
 	this->addChild(m_gameLayer);
 	this->addChild(StatusLayer::create(), 0, LAYER_STATUS);
 
@@ -45,7 +44,7 @@ void PlayScene::onExit()
 
 void PlayScene::update(float delta)
 {
-	cpSpaceStep(m_space, delta);
+//	cpSpaceStep(m_space, delta);
 
 	AnimationLayer *animationLayer =
 		static_cast<AnimationLayer *>(m_gameLayer->getChildByTag(LAYER_ANIMATION));
@@ -55,6 +54,7 @@ void PlayScene::update(float delta)
 
 void PlayScene::initPhysics()
 {
+#if 0
 	m_space = cpSpaceNew();
 
 	cpVect gravity = { 0.0f, -350.0f };
@@ -67,17 +67,21 @@ void PlayScene::initPhysics()
 
 	cpSpaceAddCollisionHandler(m_space, SPRITE_RUNNER, SPRITE_COIN, collisionCoinBegin, nullptr, nullptr, nullptr, this);
 	cpSpaceAddCollisionHandler(m_space, SPRITE_RUNNER, SPRITE_ROCK, collisionRockBegin, nullptr, nullptr, nullptr, this);
+#endif
 }
 
 void PlayScene::uninitPhysics()
 {
+#if 0
 	cpShapeFree(m_wallBottom);
 	m_wallBottom = nullptr;
 
 	cpSpaceFree(m_space);
 	m_space = nullptr;
+#endif
 }
 
+#if 0
 cpBool PlayScene::collisionCoinBegin(cpArbiter * arb, cpSpace * space, void * data)
 {
 	PlayScene *This = static_cast<PlayScene *>(data);
@@ -106,11 +110,12 @@ cpBool PlayScene::collisionRockBegin(cpArbiter * arb, cpSpace * space, void * da
 
 	return cpFalse;
 }
+#endif
 
 void PlayScene::removeCoin(cpSpace * space, void * key, void * data)
 {
 	PlayScene *This = static_cast<PlayScene *>(data);
 	BackgroundLayer *backgroundLayer =
 		This->m_gameLayer->getChildByTag<BackgroundLayer *>(LAYER_BACKGROUND);
-	backgroundLayer->removeObjectByShape(static_cast<cpShape *>(key));
+//	backgroundLayer->removeObjectByShape(static_cast<cpShape *>(key));
 }

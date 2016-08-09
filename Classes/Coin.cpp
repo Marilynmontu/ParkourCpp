@@ -1,8 +1,7 @@
 #include "Coin.h"
-#include "_chipmunk.h"
 #include "Global.h"
 
-Coin::Coin(SpriteBatchNode * spriteSheet, cpSpace * space, cpVect pos)
+Coin::Coin(SpriteBatchNode * spriteSheet, cpSpace * space, Vec2 pos)
 	: GameObject(space)
 {
 	Vector<SpriteFrame *> animFrames;
@@ -15,8 +14,9 @@ Coin::Coin(SpriteBatchNode * spriteSheet, cpSpace * space, cpVect pos)
 	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
 	auto action = RepeatForever::create(Animate::create(animation));
 
-	m_sprite = PhysicsSprite::createWithSpriteFrameName("coin0.png");
+	m_sprite = Sprite::createWithSpriteFrameName("coin0.png");
 
+#if 0
 	// init physics
 	float radius = 0.95f * m_sprite->getContentSize().width / 2.0f;
 	m_body = cpBodyNewStatic();
@@ -29,6 +29,8 @@ Coin::Coin(SpriteBatchNode * spriteSheet, cpSpace * space, cpVect pos)
 	cpShapeSetSensor(m_shape, cpTrue);
 
 	cpSpaceAddStaticShape(m_space, m_shape);
+#endif
+	m_sprite->setPosition(pos);
 
 	// add sprite to sprite sheet
 	m_sprite->runAction(action);

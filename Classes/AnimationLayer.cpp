@@ -1,6 +1,5 @@
 #include "AnimationLayer.h"
 #include <sstream>
-#include "_chipmunk.h"
 #include <AudioEngine.h>
 #include "StatusLayer.h"
 #include "Global.h"
@@ -10,7 +9,7 @@ using namespace cocos2d::experimental; // for AudioEngine
 AnimationLayer * AnimationLayer::create(cpSpace *space)
 {
 	AnimationLayer *pRet = new(std::nothrow) AnimationLayer();
-	if (pRet && (pRet->m_space = space) && pRet->init())
+	if (pRet && pRet->init())
 	{
 		pRet->autorelease();
 		return pRet;
@@ -25,11 +24,13 @@ AnimationLayer * AnimationLayer::create(cpSpace *space)
 
 AnimationLayer::~AnimationLayer()
 {
+#if 0
 	cpShapeFree(m_shape);
 	m_shape = nullptr;
 
 	cpBodyFree(m_body);
 	m_body = nullptr;
+#endif
 }
 
 bool AnimationLayer::init()
@@ -43,9 +44,10 @@ bool AnimationLayer::init()
 
 	this->initAction();
 
-	m_sprite = PhysicsSprite::createWithSpriteFrameName("runner0.png");
+	m_sprite = Sprite::createWithSpriteFrameName("runner0.png");
 	auto contentSize = m_sprite->getContentSize();
 
+#if 0
 	m_body = cpBodyNew(1.0f, cpMomentForBox(1.0f, contentSize.width, contentSize.height));
 	cpVect bodyPos = { RUNNER_START_X, GROUND_HEIGHT + contentSize.height / 2 };
 	cpBodySetPos(m_body, bodyPos);
@@ -60,13 +62,21 @@ bool AnimationLayer::init()
 
 	m_sprite->setCPBody(m_body);
 	m_sprite->runAction(m_runningAction);
+#endif
+	m_sprite->setPosition(RUNNER_START_X, GROUND_HEIGHT + contentSize.height / 2);
+	m_sprite->runAction(m_runningAction);
+
+	auto actionTo = MoveTo::create(2.0f, Vec2(400.0f, 85.0f));
+	m_sprite->runAction(actionTo);
 
 	m_spriteSheet->addChild(m_sprite);
 
+#if 0
 	m_debugNode = PhysicsDebugNode::create(m_space);
 	this->addChild(m_debugNode, 10);
 
 	// m_debugNode->setVisible(false);
+#endif
 
 	m_stat = RUNNER_STAT_RUNNING;
 
@@ -101,6 +111,7 @@ void AnimationLayer::update(float dt)
 		this->getParent()->getParent()->getChildByTag<StatusLayer *>(LAYER_STATUS);
 	statusLayer->updateMeter(m_sprite->getPositionX() - RUNNER_START_X);
 
+#if 0
 	// check and update runner stat
 	cpVect vel = cpBodyGetVel(m_body);
 	if (m_stat == RUNNER_STAT_JUMP_UP) {
@@ -117,6 +128,7 @@ void AnimationLayer::update(float dt)
 			m_sprite->runAction(m_runningAction);
 		}
 	}
+#endif
 }
 
 void AnimationLayer::onExit()
@@ -175,9 +187,11 @@ void AnimationLayer::jump()
 {
 	log("jump");
 	if (m_stat == RUNNER_STAT_RUNNING) {
+#if 0
 		cpVect j = { 0.0f, 250.0f };
 		cpVect r = cpvzero;
 		cpBodyApplyImpulse(m_body, j, r);
+#endif
 		m_stat = RUNNER_STAT_JUMP_UP;
 		m_sprite->stopAllActions();
 		m_sprite->runAction(m_jumpUpAction);

@@ -170,7 +170,6 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\cocos2d-x-3.10\prebuilt\win32\*.*" "$(OutDir)"
     <ClInclude Include="..\Classes\PlayScene.h" />
     <ClInclude Include="..\Classes\Rock.h" />
     <ClInclude Include="..\Classes\StatusLayer.h" />
-    <ClInclude Include="..\Classes\_chipmunk.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

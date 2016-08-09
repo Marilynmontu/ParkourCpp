@@ -24,12 +24,16 @@ protected:
 	Action *m_runningAction;
 	Action *m_jumpUpAction;
 	Action *m_jumpDownAction;
+
+	Sprite *m_sprite;
+#if 0
 	PhysicsSprite *m_sprite;
 	cpSpace *m_space;
 	cpBody *m_body;
 	cpShape *m_shape;
 
 	PhysicsDebugNode *m_debugNode;
+#endif
 
 	int m_stat;
 

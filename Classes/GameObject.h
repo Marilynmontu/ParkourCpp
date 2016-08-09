@@ -15,12 +15,14 @@ public:
 	int getMapIndex() const { return m_mapIndex; }
 	void setMapIndex(int value) { m_mapIndex = value; }
 	
-	cpShape *getShape() const { return m_shape; }
+//	cpShape *getShape() const { return m_shape; }
 
 protected:
 	int m_mapIndex;
+#if 0
 	cpSpace *m_space;
 	cpShape *m_shape;
 	cpBody *m_body;
-	PhysicsSprite *m_sprite;
+#endif
+	Sprite *m_sprite;
 };

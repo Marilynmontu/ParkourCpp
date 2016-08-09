@@ -6,5 +6,5 @@ struct cpVect;
 class Coin : public GameObject
 {
 public:
-	Coin(SpriteBatchNode *spriteSheet, cpSpace *space, cpVect pos);
+	Coin(SpriteBatchNode *spriteSheet, cpSpace *space, Vec2 pos);
 };
